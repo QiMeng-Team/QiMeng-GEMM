@@ -24,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>Academic Project Page</title>
+  <title>QiMeng-GEMM: Automatically Generating High-Performance Matrix Multiplication Code by Exploiting Large Language Models</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -56,7 +56,7 @@
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
+                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Qirui Zhou</a><sup>*</sup>,</span>
                 <span class="author-block">
                   <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
                   <span class="author-block">
@@ -148,7 +148,9 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
+            As a crucial operator in numerous scientific and engineering computing applications, the automatic optimization of General Matrix Multiplication (GEMM) with full utilization of ever-evolving hardware architectures (e.g. GPUs and RISC-V) is of paramount importance. While Large Language Models (LLMs) can generate functionally correct code for simple tasks, they have yet to produce high-performance code. The key challenge resides in deeply understanding diverse hardware architectures and crafting prompts that effectively unleash the potential of LLMs to generate high-performance code. 
+
+In this paper, we propose a novel prompt mechanism called QiMeng-GEMM, which enables LLMs to comprehend the architectural characteristics of different hardware platforms and automatically search for the optimization combinations for GEMM. The key of QiMeng-GEMM is a set of informative, adaptive, and iterative meta-prompts. Based on this, a searching strategy for optimal combinations of meta-prompts is used to iteratively generate high-performance code. Extensive experiments conducted on 4 leading LLMs, various paradigmatic hardware platforms, and representative matrix dimensions unequivocally demonstrate QiMeng-GEMM’s superior performance in auto-generating optimized GEMM code. Compared to vanilla prompts, our method achieves a performance enhancement of up to $113 \times$. Even when compared to human experts, our method can reach $115\%$ of cuBLAS on NVIDIA GPUs and $211\%$ of OpenBLAS on RISC-V CPUs. Notably, while human experts often take months to optimize GEMM, our approach reduces the development cost by over $240\times$.
           </p>
         </div>
       </div>
