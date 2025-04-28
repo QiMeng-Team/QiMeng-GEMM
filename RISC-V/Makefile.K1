@@ -1,0 +1,46 @@
+CC = /data/sfs/share/toolchain/spacemit-toolchain-linux-glibc-x86_64-v1.0.1/bin/riscv64-unknown-linux-gnu-clang
+CFLAGS = -O2 -mcpu=spacemit-x60 -march=rv64gcv_zba_zbb_zbc_zbs_zicbop -mllvm -cache-line-size=64 -mllvm -prefetch-distance=128 -fuse-ld=lld -I /data/sfs/share/toolchain/lib/musepi/openblas_default/include  -DGEMM_P=$(GEMM_P) -DGEMM_Q=$(GEMM_Q) -DGEMM_R=$(GEMM_R)
+LDFLAGS = /data/sfs/share/toolchain/lib/musepi/openblas_default/lib/libopenblas_riscv64_zvl256bp-r0.3.28.dev.a -lpthread
+
+OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/gemm.o $(BUILD_DIR)/gemm_ncopy_8.o $(BUILD_DIR)/gemm_tcopy_16.o $(BUILD_DIR)/sgemm_beta_256.o $(BUILD_DIR)/sgemm_kernel_16x8_musepi.o 
+TEST_OBJS = $(BUILD_DIR)/test_openblas_error.o $(BUILD_DIR)/gemm.o $(BUILD_DIR)/gemm_ncopy_8.o $(BUILD_DIR)/gemm_tcopy_16.o $(BUILD_DIR)/sgemm_beta_256.o $(BUILD_DIR)/sgemm_kernel_16x8_musepi.o 
+
+# Ensure the build directory exists
+BUILD_DIR = build
+
+# The target 'gemm_program' will link all object files
+gemm_program: $(BUILD_DIR) $(OBJS)
+	$(CC) -o $(BUILD_DIR)/gemm_program $(OBJS) $(LDFLAGS) $(CFLAGS)
+
+gemm_check: $(BUILD_DIR) $(TEST_OBJS)
+	$(CC) -o $(BUILD_DIR)/gemm_check $(TEST_OBJS) $(LDFLAGS) $(CFLAGS)
+
+# Create build directory if it doesn't exist
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Rules for compiling each .c file to .o file
+$(BUILD_DIR)/main.o: main.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c main.c -o $(BUILD_DIR)/main.o $(CFLAGS)
+
+$(BUILD_DIR)/test_openblas_error.o: test_openblas_error.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c test_openblas_error.c -o $(BUILD_DIR)/test_openblas_error.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm.o: driver/gemm.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c driver/gemm.c -o $(BUILD_DIR)/gemm.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm_ncopy_8.o: kernel/gemm_ncopy_8.c
+	$(CC) -c kernel/gemm_ncopy_8.c -o $(BUILD_DIR)/gemm_ncopy_8.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm_tcopy_16.o: kernel/gemm_tcopy_16.c
+	$(CC) -c kernel/gemm_tcopy_16.c -o $(BUILD_DIR)/gemm_tcopy_16.o $(CFLAGS)
+
+$(BUILD_DIR)/sgemm_beta_256.o: kernel/sgemm_beta_256.c
+	$(CC) -c kernel/sgemm_beta_256.c -o $(BUILD_DIR)/sgemm_beta_256.o $(CFLAGS)
+
+$(BUILD_DIR)/sgemm_kernel_16x8_musepi.o: kernel/sgemm_kernel_16x8_musepi.c
+	$(CC) -c kernel/sgemm_kernel_16x8_musepi.c -o $(BUILD_DIR)/sgemm_kernel_16x8_musepi.o $(CFLAGS)
+
+# Clean rule to remove compiled files
+clean:
+	rm -rf $(BUILD_DIR)

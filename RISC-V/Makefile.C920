@@ -1,0 +1,48 @@
+# Makefile for high-performance matrix multiplication
+
+CC = /data/sfs/share/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.8.1/bin/riscv64-unknown-linux-gnu-gcc
+CFLAGS = -static -O3 -march=rv64imafdcvxtheadc -I /data/sfs/share/toolchain/lib/c910/openblas_default/include  -DGEMM_P=$(GEMM_P) -DGEMM_Q=$(GEMM_Q) -DGEMM_R=$(GEMM_R)
+LDFLAGS = /data/sfs/share/toolchain/lib/c910/openblas_default/lib/libopenblas_c910v-r0.3.13.dev.a -lpthread
+
+OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/gemm.o $(BUILD_DIR)/gemm_ncopy_4.o $(BUILD_DIR)/gemm_tcopy_16.o $(BUILD_DIR)/sgemm_beta_rvv1.0.o $(BUILD_DIR)/sgemm_kernel_16x4_c920_openblas.o 
+TEST_OBJS = $(BUILD_DIR)/test_openblas_error.o $(BUILD_DIR)/gemm.o $(BUILD_DIR)/gemm_ncopy_4.o $(BUILD_DIR)/gemm_tcopy_16.o $(BUILD_DIR)/sgemm_beta_rvv1.0.o $(BUILD_DIR)/sgemm_kernel_16x4_c920_openblas.o 
+
+# Ensure the build directory exists
+BUILD_DIR = build
+
+# The target 'gemm_program' will link all object files
+gemm_program: $(BUILD_DIR) $(OBJS)
+	$(CC) -o $(BUILD_DIR)/gemm_program $(OBJS) $(LDFLAGS) $(CFLAGS)
+
+gemm_check: $(BUILD_DIR) $(TEST_OBJS)
+	$(CC) -o $(BUILD_DIR)/gemm_check $(TEST_OBJS) $(LDFLAGS) $(CFLAGS)
+
+# Create build directory if it doesn't exist
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Rules for compiling each .c file to .o file
+$(BUILD_DIR)/main.o: main.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c main.c -o $(BUILD_DIR)/main.o $(CFLAGS)
+
+$(BUILD_DIR)/test_openblas_error.o: test_openblas_error.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c test_openblas_error.c -o $(BUILD_DIR)/test_openblas_error.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm.o: driver/gemm.c driver/gemm.h | $(BUILD_DIR)
+	$(CC) -c driver/gemm.c -o $(BUILD_DIR)/gemm.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm_ncopy_4.o: kernel/gemm_ncopy_4.c | $(BUILD_DIR)
+	$(CC) -c kernel/gemm_ncopy_4.c -o $(BUILD_DIR)/gemm_ncopy_4.o $(CFLAGS)
+
+$(BUILD_DIR)/gemm_tcopy_16.o: kernel/gemm_tcopy_16.c | $(BUILD_DIR)
+	$(CC) -c kernel/gemm_tcopy_16.c -o $(BUILD_DIR)/gemm_tcopy_16.o $(CFLAGS)
+
+$(BUILD_DIR)/sgemm_beta_rvv1.0.o: kernel/sgemm_beta_rvv1.0.c | $(BUILD_DIR)
+	$(CC) -c kernel/sgemm_beta_rvv1.0.c -o $(BUILD_DIR)/sgemm_beta_rvv1.0.o $(CFLAGS)
+
+$(BUILD_DIR)/sgemm_kernel_16x4_c920_openblas.o: kernel/sgemm_kernel_16x4_c920_openblas.c | $(BUILD_DIR)
+	$(CC) -c kernel/sgemm_kernel_16x4_c920_openblas.c -o $(BUILD_DIR)/sgemm_kernel_16x4_c920_openblas.o $(CFLAGS)
+
+# Clean rule to remove compiled files
+clean:
+	rm -rf $(BUILD_DIR)
