@@ -20,7 +20,7 @@ cuda_gemm(M, N, K, alpha, d_A, d_B, beta, d_C);
 ### RISC-V
 **Configure Cross-Compiler:** 
 
-First, you need to configure the compilation toolchain on the specific hardware platform. Then, modify the variables `CC`, `CFLAGS`, and `LDFLAGS` as shown below to support the subsequent cross - compilation process. The following takes the C910 platform as an example.
+First, you need to configure the compilation toolchain on the specific hardware platform. Then, modify the variables `CC`, `CFLAGS`, and `LDFLAGS` as shown below to support the subsequent cross-compilation process. The following takes the C910 platform as an example.
 ```makefile  
 CC = /data/sfs/share/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.8.1/bin/riscv64-unknown-linux-gnu-gcc  
 CFLAGS = -static -O3 -march=rv64imafdcvxtheadc -I /data/sfs/share/toolchain/lib/c910/openblas_default/include 
@@ -37,7 +37,14 @@ In the Makefile, use `PLATFORM` to specify the RISC-V platform, and then select 
 **Run Code:**  
 ```bash  
 ./scripts/check_gemm.sh M=1024 N=1024 K=1024  
-```  
+```
+
+**Tools**
+If the GEMM dimension you want to generate is not in the files within the config directory, you can visit the following website to generate it.
+
+```
+http://1.94.237.163:7860/
+```
 
 
 ## Paper
