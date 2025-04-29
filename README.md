@@ -39,14 +39,6 @@ In the Makefile, use `PLATFORM` to specify the RISC-V platform, and then select 
 ./scripts/check_gemm.sh M=1024 N=1024 K=1024  
 ```
 
-### Tools
-
-If the GEMM dimension you want to generate is not in the files within the config directory, you can visit [QiMeng-Tools](http://1.94.237.163:7860/) to generate it.
-
-QiMeng-GEMM uses a Meta-Prompt mechanism to generate code for specific hardware platforms and employs an Auto-Schedule mechanism to enhance code performance. Based on these features, the workflow is as follows: 1. Receive user input; 2. Generate code using QiMeng-GEMM; 3. Verify results on the RISC-V platform. Due to potential hallucinations in LLMs, multiple code generations and verifications on the RISC-V platform may be required to ensure code correctness.
-
-
-
 ## Paper
 This paper has beed published on AAAI2025.
 
