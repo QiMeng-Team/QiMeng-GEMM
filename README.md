@@ -1,6 +1,8 @@
 # QiMeng-GEMM: Automatically Generating High-Performance Matrix Multiplication Code by Exploiting Large Language Models
 QiMeng-GEMM is an innovative approach to automatically generate high-performance matrix multiplication (GEMM) code using LLMs. This codebase provides a comprehensive solution for efficiently computing matrix multiplications, leveraging the power of LLMs to generate optimized code based on user inputs.
 
+Paper link: [QiMeng-GEMM: Automatically Generating High-Performance Matrix Multiplication Code by Exploiting Large Language Models](https://ojs.aaai.org/index.php/AAAI/article/view/34461)
+
 ## Quick Start
 ### CUDA
 
