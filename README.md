@@ -22,9 +22,9 @@ cuda_gemm(M, N, K, alpha, d_A, d_B, beta, d_C);
 
 First, you need to configure the compilation toolchain on the specific hardware platform. Then, modify the variables `CC`, `CFLAGS`, and `LDFLAGS` as shown below to support the subsequent cross-compilation process. The following takes the C910 platform as an example.
 ```makefile  
-CC = /data/sfs/share/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.8.1/bin/riscv64-unknown-linux-gnu-gcc  
-CFLAGS = -static -O3 -march=rv64imafdcvxtheadc -I /data/sfs/share/toolchain/lib/c910/openblas_default/include 
-LDFLAGS = /data/sfs/share/toolchain/lib/c910/openblas_default/lib/libopenblas_c910v-r0.3.13.dev.a -lpthread  
+export CC = /data/sfs/share/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.8.1/bin/riscv64-unknown-linux-gnu-gcc  
+export CFLAGS = -static -O3 -march=rv64imafdcvxtheadc -I /data/sfs/share/toolchain/lib/c910/openblas_default/include 
+export LDFLAGS = /data/sfs/share/toolchain/lib/c910/openblas_default/lib/libopenblas_c910v-r0.3.13.dev.a -lpthread  
 ```  
 
 **Compile Code:**  
