@@ -39,7 +39,7 @@ In the Makefile, use `PLATFORM` to specify the RISC-V platform, and then select 
 ./scripts/check_gemm.sh M=1024 N=1024 K=1024  
 ```
 
-###Tools
+### Tools
 
 If the GEMM dimension you want to generate is not in the files within the config directory, you can visit [QiMeng-Tools](http://1.94.237.163:7860/) to generate it.
 
